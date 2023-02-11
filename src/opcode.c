@@ -254,11 +254,6 @@ void CHIP8_DXYN(CHIP8* chip)
 
     // read n bytes
     for (uint8_t i = 0; i < N; i++) {
-        // Shift y display
-        // Clip at bottom
-        ypos += 1;
-        if (ypos > 31)
-            break;
         // Get sprite
         // All sprites are 8 pixels wide
         uint8_t byte = chip->memory[chip->index + i];
@@ -279,10 +274,12 @@ void CHIP8_DXYN(CHIP8* chip)
             chip->registers[0xF] = 1;
 
         // XOR whole byte on scanline
-        chip->display[ypos] = scanline ^ spriteline;
+        if(ypos <= 31)
+            chip->display[ypos] = scanline ^ spriteline;
 
-        // clip if next ypos is > 31
-        //if (chip->registers[Vy] + i + 1 > 31) break;
+        // Shift y display
+        // Clip at bottom
+        ypos += 1;
     }
 }
 

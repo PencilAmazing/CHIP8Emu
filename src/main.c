@@ -56,8 +56,8 @@ int main(int argc, char** argv)
     printf("Loading test_opcode.ch8\n");
     //err = load_program("c8_test.ch8", chip);
     //err = load_program("test_opcode.ch8", chip);
-    err = load_program("chip8-test-suite.ch8", chip);
-    //err = load_program("maze.ch8", chip);
+    //err = load_program("chip8-test-suite.ch8", chip);
+    err = load_program("breakout.ch8", chip);
 
     if (err != 0) {
         printf("%d Failed to load program\n", err);
@@ -71,14 +71,19 @@ int main(int argc, char** argv)
     int cycle_count = 0;
 
     // For aftereffect like CRT that doesn't even work
+    uint64_t prev_prev_display[32] = { 0 };
     uint64_t prev_display[32] = { 0 };
 
     // Don't set target fps that's stupid
-    // SetTargetFPS(5006);
+     SetTargetFPS(5006/16);
 
     while (!WindowShouldClose()) {
         // Copy prev display
-        memcpy(prev_display, chip->display, sizeof(prev_display));
+        //memcpy(prev_display, chip->display, sizeof(prev_display));
+        for (int i = 0; i < 32; i++) {
+            prev_prev_display[i] = prev_display[i];
+            prev_display[i] = chip->display[i];
+        }
         // Test keys
         raylib_test_keys(chip);
         // Cycle and update current display
@@ -100,6 +105,8 @@ int main(int argc, char** argv)
                 if ((chip->display[y] & xmask) != 0)
                     PixelColor = BLACK;
                 else if ((prev_display[y] & xmask) != 0)
+                    PixelColor = DARKGRAY;
+                else if ((prev_prev_display[y] & xmask) != 0)
                     PixelColor = GRAY;
 
                 DrawRectangle(shift + x * scale, shift + y * scale, scale - offset, scale - offset, PixelColor);
