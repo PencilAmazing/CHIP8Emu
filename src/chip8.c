@@ -9,6 +9,7 @@ CHIP8* create_chip8()
 
     for (int i = 0; i < 16; i++) {
         chip->registers[i] = 0;
+        chip->keypad[i] = 0;
     }
 
     // Setup program counter
@@ -20,8 +21,8 @@ CHIP8* create_chip8()
     }
 
     // init debug values
-    chip->memory[0x1FF] = 1;
-    chip->memory[0x1FE] = 1;
+    //chip->memory[0x1FF] = 5;
+    //chip->memory[0x1FE] = 1;
 
     return chip;
 }

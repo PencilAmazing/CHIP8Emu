@@ -289,7 +289,8 @@ void CHIP8_DXYN(CHIP8* chip)
 void CHIP8_EX9E(CHIP8* chip)
 {
     uint8_t Vx = (chip->opcode & x) >> 8u;
-    if (chip->keypad[chip->registers[Vx]] != 0) { // key is down
+    uint8_t value = chip->registers[Vx];
+    if (chip->keypad[value] != 0x0) { // key is down
         chip->pc += 2;
     }
 }
@@ -297,7 +298,7 @@ void CHIP8_EX9E(CHIP8* chip)
 void CHIP8_EXA1(CHIP8* chip)
 {
     uint8_t Vx = (chip->opcode & x) >> 8u;
-    if (chip->keypad[chip->registers[Vx]] == 0) { // key is up
+    if (chip->keypad[chip->registers[Vx]] == 0x0) { // key is up
         chip->pc += 2;
     }
 }
@@ -316,7 +317,8 @@ void CHIP8_FX0A(CHIP8* chip)
             // Store key in Vx
             chip->registers[Vx] = i;
             // cancel step backwards
-            chip->pc += 2;
+            //chip->pc += 2;
+            return;
         }
     }
     // repeat same instruction
@@ -370,8 +372,8 @@ void CHIP8_FX33(CHIP8* chip)
 void CHIP8_FX55(CHIP8* chip)
 {
     uint8_t Vx = (chip->opcode & x) >> 8u;
-    uint8_t l = chip->registers[Vx];
-    for (uint8_t i = 0; i <= l; i++) {
+    //uint8_t l = chip->registers[Vx];
+    for (uint8_t i = 0; i <= Vx; i++) {
         chip->memory[chip->index] = chip->registers[i];
         chip->index += 1;
     }

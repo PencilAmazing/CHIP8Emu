@@ -22,10 +22,8 @@ set_property(TARGET CHIP8Emu PROPERTY DEBUG_POSTFIX _d)
 target_link_libraries(CHIP8Emu raylib)
 
 # Copy ROMs to binary dir
-configure_file("init.ch8" "." COPYONLY)
 configure_file("test_opcode.ch8" "." COPYONLY)
 configure_file("c8_test.ch8" "." COPYONLY)
 configure_file("chip8-test-suite.ch8" "." COPYONLY)
-configure_file("trip8.ch8" "." COPYONLY)
 configure_file("maze.ch8" "." COPYONLY)
 configure_file("${raylib_INSTALL_DIR}/bin/raylib.dll" "." COPYONLY)
